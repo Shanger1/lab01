@@ -25,14 +25,14 @@ public class AnimalTest {
     }
 
     @Test
-    public void testGetAll(){
+    public void testGetAll() {
         assertNotNull(animalRepository.getAll());
     }
 
     @Test
     public void testAdd() {
         Animal dog = new Animal();
-        dog.setId((long)1);
+        dog.setId((long) 1);
         dog.setAge(12);
         dog.setName("Adar");
         dog.setNumberOfLegs(4);
@@ -40,8 +40,8 @@ public class AnimalTest {
         animalRepository.add(dog);
         assertNotNull(animalRepository.getById(dog.getId()));
         assertThat(dog.getId(), is(1));
-        assertThat(dog.getName(),containsString("dar"));
-        assertEquals(4,dog.getNumberOfLegs());
+        assertThat(dog.getName(), containsString("dar"));
+        assertEquals(4, dog.getNumberOfLegs());
 
     }
 
@@ -50,34 +50,35 @@ public class AnimalTest {
         Animal dog = animalRepository.getById((long) 1);
         animalRepository.delete(dog);
 
-        if (animalRepository.getAll().size() > 0){
+        if (animalRepository.getAll().size() > 0) {
             assertNotNull(animalRepository.getAll());
-        }else {
-            assertNull(animalRepository.getById(dog.getId()));
         }
+
+        assertNull(animalRepository.getById(dog.getId()));
+
     }
 
     @Test
-    public void updateUndead(){
+    public void testUpdate() {
         Animal dog = new Animal();
         dog.setId((long) 1);
         dog.setAge(12);
         dog.setName("Adar");
         dog.setNumberOfLegs(4);
-        Long animalToUpdate = (long)1;
+        Long animalToUpdate = (long) 1;
 
         animalRepository.update(animalToUpdate, dog);
         assertEquals(animalRepository.getById(animalToUpdate).getName(), dog.getName());
 
-        for(Animal animal : animalRepository.getAll()){
-            if(dog.getId() == animalToUpdate) {
+        for (Animal animal : animalRepository.getAll()) {
+            if (dog.getId() == animalToUpdate) {
                 assertNotEquals(animal.getName(), dog.getName());
             }
         }
     }
 
     @Before
-    public void initRepository(){
+    public void initRepository() {
         animalRepository = AnimalRepositoryFactory.getInstance();
 
         Animal cat = new Animal();
