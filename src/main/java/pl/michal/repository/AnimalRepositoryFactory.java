@@ -65,7 +65,7 @@ public class AnimalRepositoryFactory implements AnimalRepository{
         getAllStatement = connection.
                 prepareStatement("SELECT id, name, age, numberOfLegs FROM Animal");
         updateStatement = connection.
-                prepareStatement("UPDATE Animal SET name = ?, age = ?, numberOfLegs = ? WHERE id = ?");
+                prepareStatement("UPDATE Animal SET name = ?, age = ?, numberOfLegs = ?");
         getByIdStatement = connection.
                 prepareStatement("SELECT id, name, age, numberOfLegs FROM Animal WHERE id = ?");
         deleteStatement = connection.
@@ -119,7 +119,7 @@ public class AnimalRepositoryFactory implements AnimalRepository{
         updateStatement.setString(1,newAnimal.getName());
         updateStatement.setInt(2,newAnimal.getAge());
         updateStatement.setInt(3,newAnimal.getNumberOfLegs());
-        updateStatement.setInt(4,oldId);
+
         updateStatement.executeUpdate();
 
     }

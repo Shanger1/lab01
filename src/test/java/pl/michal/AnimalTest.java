@@ -65,6 +65,7 @@ public class AnimalTest {
     }
     @Test
     public void testUpdate() throws SQLException {
+        Animal animalTest = animalRepository.getById(3);
         Animal cat = new Animal();
         cat.setAge(15);
         cat.setName("Alice");
@@ -72,12 +73,13 @@ public class AnimalTest {
         int animalToUpdate = animalRepository.getAll().get(0).getId();
 
         animalRepository.update(animalToUpdate, cat);
+
         assertEquals(animalRepository.getById(animalToUpdate).getName(), cat.getName());
 
-        for (Animal animal : animalRepository.getAll()) {
-            if (cat.getId() == animalToUpdate) {
-                assertNotEquals(animal.getName(), cat.getName());
-            }
+
+            for (Animal animal : animalRepository.getAll()) {
+               assertNotEquals(animal.getName(), cat.getName());
+
         }
     }
 
