@@ -72,8 +72,9 @@ public class AnimalRepositoryFactory implements AnimalRepository{
                 prepareStatement("DELETE FROM Animal WHERE id = ?");
     }
 
-    public static AnimalRepository getInstance(){
-        return null;
+    public static AnimalRepository getInstance() throws SQLException {
+        String url = "jdbc:hsqldb:hsql://localhost/workdb";
+        return new AnimalRepositoryFactory(DriverManager.getConnection(url));
     }
 
     @Override

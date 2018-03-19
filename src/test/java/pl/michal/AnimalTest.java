@@ -82,7 +82,7 @@ public class AnimalTest {
     }
 
     @Before
-    public void initRepository() {
+    public void initRepository() throws SQLException {
         animalRepository = AnimalRepositoryFactory.getInstance();
 
         Animal cat = new Animal();
@@ -100,10 +100,6 @@ public class AnimalTest {
 
         animalRepository.add(cat);
         animalRepository.add(parrot);
-    }
-    public AnimalTest() throws SQLException {
-        String url = "jdbc:hsqldb:hsql://localhost/workdb";
-        animalRepository = new AnimalRepositoryFactory(DriverManager.getConnection(url));
     }
 
 
