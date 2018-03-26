@@ -72,15 +72,10 @@ public class AnimalTest {
         cat.setNumberOfLegs(3);
         int animalToUpdate = animalRepository.getAll().get(0).getId();
 
-        animalRepository.update(animalToUpdate, cat);
+        assertEquals(1, animalRepository.update(animalToUpdate, cat));
 
         assertEquals(animalRepository.getById(animalToUpdate).getName(), cat.getName());
 
-
-            for (Animal animal : animalRepository.getAll()) {
-               assertNotEquals(animal.getName(), cat.getName());
-
-        }
     }
 
     @Before

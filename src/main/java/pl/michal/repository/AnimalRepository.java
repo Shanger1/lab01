@@ -14,5 +14,5 @@ public interface AnimalRepository {
     public List<Animal> getAll();
     public void add(Animal animal);
     public void delete(Animal animal) throws SQLException;
-    public void update(int oldId, Animal newAnimal) throws SQLException;
+    public int update(int oldId, Animal newAnimal) throws SQLException;
 }

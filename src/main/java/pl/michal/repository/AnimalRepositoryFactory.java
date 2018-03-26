@@ -65,7 +65,7 @@ public class AnimalRepositoryFactory implements AnimalRepository{
         getAllStatement = connection.
                 prepareStatement("SELECT id, name, age, numberOfLegs FROM Animal");
         updateStatement = connection.
-                prepareStatement("UPDATE Animal SET name = ?, age = ?, numberOfLegs = ?");
+                prepareStatement("UPDATE Animal SET name = ?, age = ?, numberOfLegs = ? WHERE id = ?");
         getByIdStatement = connection.
                 prepareStatement("SELECT id, name, age, numberOfLegs FROM Animal WHERE id = ?");
         deleteStatement = connection.
@@ -113,14 +113,20 @@ public class AnimalRepositoryFactory implements AnimalRepository{
     }
 
     @Override
-    public void update(int oldId, Animal newAnimal) throws SQLException{
+    public int update(int oldId, Animal newAnimal) throws SQLException{
+        int count = 0;
+        try {
+            updateStatement.setString(1, newAnimal.getName());
+            updateStatement.setInt(2, newAnimal.getAge());
+            updateStatement.setInt(3, newAnimal.getNumberOfLegs());
+            updateStatement.setInt(4,oldId);
 
-
-        updateStatement.setString(1,newAnimal.getName());
-        updateStatement.setInt(2,newAnimal.getAge());
-        updateStatement.setInt(3,newAnimal.getNumberOfLegs());
-
-        updateStatement.executeUpdate();
+            count = updateStatement.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new IllegalStateException(e.getMessage() + "\n" + e.getStackTrace().toString());
+        }
+        return count;
 
     }
 
