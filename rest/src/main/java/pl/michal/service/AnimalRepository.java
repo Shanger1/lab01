@@ -1,4 +1,4 @@
-package pl.michal.repository;
+package pl.michal.service;
 
 
 import pl.michal.domain.Animal;

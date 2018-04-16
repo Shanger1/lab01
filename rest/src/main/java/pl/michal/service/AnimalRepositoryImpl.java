@@ -1,13 +1,14 @@
-package pl.michal.repository;
+package pl.michal.service;
 
+import org.springframework.stereotype.Component;
 import pl.michal.domain.Animal;
 
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
-
-public class AnimalRepositoryFactory implements AnimalRepository{
+@Component
+public class AnimalRepositoryImpl implements AnimalRepository {
 
     private Connection connection;
 
@@ -17,15 +18,24 @@ public class AnimalRepositoryFactory implements AnimalRepository{
     private PreparedStatement updateStatement;
     private PreparedStatement deleteStatement;
 
-    public AnimalRepositoryFactory() throws SQLException {
+    public void AnimalRepositoryImpl() throws SQLException {
+        this.connection = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/workdb");
+        if (!isDatabaseReady()) {
+            createTables();
+        }
+        this.setConnection(this.connection);
     }
 
-    public AnimalRepositoryFactory(Connection connection) throws SQLException {
+    public AnimalRepositoryImpl(Connection connection) throws SQLException {
         this.connection = connection;
         if (!isDatabaseReady()) {
             createTables();
         }
         setConnection(connection);
+    }
+
+    public AnimalRepositoryImpl() throws SQLException{
+
     }
 
     public void createTables() throws SQLException {
@@ -73,11 +83,11 @@ public class AnimalRepositoryFactory implements AnimalRepository{
         deleteStatement = connection.
                 prepareStatement("DELETE FROM Animal WHERE id = ?");
     }
-
+/*
     public static AnimalRepository getInstance() throws SQLException {
         String url = "jdbc:hsqldb:hsql://localhost/workdb";
-        return new AnimalRepositoryFactory(DriverManager.getConnection(url));
-    }
+        return new AnimalRepositoryImpl(DriverManager.getConnection(url));
+    }*/
 
     @Override
     public int add(Animal animal) {

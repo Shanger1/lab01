@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
 public class AnimalMockedTest {
 
     AnimalRepository animalRepository;
@@ -88,10 +88,11 @@ public class AnimalMockedTest {
 
 
     abstract class AbstractResultSet implements ResultSet {
-        int i=0;
+        int i = 0;
+
         @Override
-        public boolean next() throws  SQLException{
-            if(i==1)
+        public boolean next() throws SQLException {
+            if (i == 1)
                 return false;
 
             i++;
@@ -99,22 +100,20 @@ public class AnimalMockedTest {
         }
 
         @Override
-        public int getInt(String id) throws SQLException{
+        public int getInt(String id) throws SQLException {
             return 1;
         }
 
         @Override
-        public String getString(String columnLabel) throws SQLException{
+        public String getString(String columnLabel) throws SQLException {
             return "Adar";
         }
 
     }
 
     @Test
-    public void checkGetting() throws  Exception{
-        when(connectionMock.prepareStatement("SELECT id, name, age, numberOfLegs FROM Animal")).thenReturn(getAllStatement);
-        AbstractResultSet mockedResultSet = mock(AbstractResultSet.class,
-                Mockito.CALLS_REAL_METHODS);
+    public void getAllAnimalsTest() throws Exception {
+        AbstractResultSet mockedResultSet = mock(AbstractResultSet.class);
         when(mockedResultSet.next()).thenCallRealMethod();
         when(mockedResultSet.getInt("id")).thenCallRealMethod();
         when(mockedResultSet.getString("name")).thenCallRealMethod();
@@ -122,7 +121,56 @@ public class AnimalMockedTest {
         when(mockedResultSet.getInt("numberOfLegs")).thenCallRealMethod();
         when(getAllStatement.executeQuery()).thenReturn(mockedResultSet);
 
-        assertEquals(1,animalRepository.getAll().size());
+        assertEquals(1, animalRepository.getAll().size());
+
+        verify(getAllStatement, times(1)).executeQuery();
+        verify(mockedResultSet, times(1)).getInt("id");
+        verify(mockedResultSet, times(1)).getString("name");
+        verify(mockedResultSet, times(1)).getInt("age");
+        verify(mockedResultSet, times(1)).getInt("numberOfLegs");
+        verify(mockedResultSet, times(2)).next();
     }
+
+    @Test
+    public void getByIdTest() throws SQLException {
+        AbstractResultSet mockedResultSet = mock(AbstractResultSet.class);
+        when(mockedResultSet.next()).thenCallRealMethod();
+        when(mockedResultSet.getInt("id")).thenCallRealMethod();
+        when(mockedResultSet.getString("name")).thenCallRealMethod();
+        when(mockedResultSet.getInt("age")).thenCallRealMethod();
+        when(mockedResultSet.getInt("numberOfLegs")).thenCallRealMethod();
+        when(getAllStatement.executeQuery()).thenReturn(mockedResultSet);
+
+        assertEquals(1, animalRepository.getAll().size());
+
+        verify(getAllStatement, times(1)).executeQuery();
+        verify(mockedResultSet, times(1)).getInt("id");
+        verify(mockedResultSet, times(1)).getString("name");
+        verify(mockedResultSet, times(1)).getInt("age");
+        verify(mockedResultSet, times(1)).getInt("numberOfLegs");
+        verify(mockedResultSet, times(2)).next();
+    }
+
+    @Test
+    public void updateAnimalTest() throws SQLException {
+        when(updateStatement.executeUpdate()).thenReturn(1);
+        Animal dog = new Animal();
+        dog.setId(1);
+        dog.setAge(12);
+        dog.setName("Adar");
+        dog.setNumberOfLegs(4);
+
+        Animal animalUpdated = new Animal();
+        animalUpdated.setId(dog.getId());
+        animalUpdated.setName("Alice");
+        animalUpdated.setAge(dog.getAge());
+        animalUpdated.setNumberOfLegs(dog.getNumberOfLegs());
+
+        assertEquals(1, animalRepository.update(dog.getId(), animalUpdated));
+        verify(updateStatement).executeUpdate();
+
+
+    }
+
 
 }

@@ -6,6 +6,17 @@ public class Animal {
     private int age;
     private int numberOfLegs;
 
+    public Animal(int id, String name, int age, int numberOfLegs) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.numberOfLegs = numberOfLegs;
+    }
+
+    public Animal(){
+
+    }
+
     public int getId() {
         return id;
     }
