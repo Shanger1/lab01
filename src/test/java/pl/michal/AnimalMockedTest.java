@@ -139,11 +139,11 @@ public class AnimalMockedTest {
         when(mockedResultSet.getString("name")).thenCallRealMethod();
         when(mockedResultSet.getInt("age")).thenCallRealMethod();
         when(mockedResultSet.getInt("numberOfLegs")).thenCallRealMethod();
-        when(getAllStatement.executeQuery()).thenReturn(mockedResultSet);
+        when(getByIdStatement.executeQuery()).thenReturn(mockedResultSet);
 
-        assertEquals(1, animalRepository.getAll().size());
+        assertNotNull(animalRepository.getById(1));
 
-        verify(getAllStatement, times(1)).executeQuery();
+        verify(getByIdStatement, times(1)).executeQuery();
         verify(mockedResultSet, times(1)).getInt("id");
         verify(mockedResultSet, times(1)).getString("name");
         verify(mockedResultSet, times(1)).getInt("age");
