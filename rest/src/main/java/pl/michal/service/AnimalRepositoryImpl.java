@@ -18,24 +18,20 @@ public class AnimalRepositoryImpl implements AnimalRepository {
     private PreparedStatement updateStatement;
     private PreparedStatement deleteStatement;
 
-    public void AnimalRepositoryImpl() throws SQLException {
-        this.connection = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/workdb");
+    public AnimalRepositoryImpl(Connection connection) throws SQLException {
+        this.connection = connection;
         if (!isDatabaseReady()) {
             createTables();
         }
         this.setConnection(this.connection);
     }
 
-    public AnimalRepositoryImpl(Connection connection) throws SQLException {
-        this.connection = connection;
+    public AnimalRepositoryImpl() throws SQLException{
+        this.connection = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/workdb");
         if (!isDatabaseReady()) {
             createTables();
         }
-        setConnection(connection);
-    }
-
-    public AnimalRepositoryImpl() throws SQLException{
-
+        this.setConnection(this.connection);
     }
 
     public void createTables() throws SQLException {
@@ -83,11 +79,6 @@ public class AnimalRepositoryImpl implements AnimalRepository {
         deleteStatement = connection.
                 prepareStatement("DELETE FROM Animal WHERE id = ?");
     }
-/*
-    public static AnimalRepository getInstance() throws SQLException {
-        String url = "jdbc:hsqldb:hsql://localhost/workdb";
-        return new AnimalRepositoryImpl(DriverManager.getConnection(url));
-    }*/
 
     @Override
     public int add(Animal animal) {

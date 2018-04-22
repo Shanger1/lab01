@@ -10,7 +10,7 @@ import java.util.List;
 public interface AnimalRepository {
     public void setConnection(Connection connection) throws SQLException;
     public Connection getConnection();
-    Animal getById(int id);
+    Animal getById(int id) throws SQLException;
     public List<Animal> getAll();
     public int add(Animal animal);
     public int delete(Animal animal) throws SQLException;

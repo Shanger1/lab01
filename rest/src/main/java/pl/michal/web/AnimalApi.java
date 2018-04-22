@@ -32,24 +32,34 @@ public class AnimalApi {
     }
 
     @RequestMapping(value = "/animals", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Animal> getAnimals(@RequestParam("filter") String f) throws SQLException{
-        List<Animal> animals = new LinkedList<Animal>();
-        for(Animal u : animalRepository.getAll()){
-            if (u.getName().contains(f)){
-                animals.add(u);
+    public List<Animal> getAnimals(@RequestParam(value = "filter",required = false) String filter) throws SQLException{
+        if(filter!= null) {
+            List<Animal> animals = new LinkedList<>();
+            for (Animal item : animalRepository.getAll()) {
+                if (item.getName().contains(filter)) {
+                    animals.add(item);
+                }
             }
+            return animals;
         }
-        return animals;
+        else{
+            return animalRepository.getAll();
+        }
     }
 
     @RequestMapping(value = "/animal", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public Long addAnimal(@RequestBody Animal u){
-        return new Long(animalRepository.add(u));
+    public Long addAnimal(@RequestBody Animal item){
+        return new Long(animalRepository.add(item));
     }
 
-    @RequestMapping(value = "/deleteAnimal", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/animal/{id}", method = RequestMethod.DELETE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Long deleteAnimal(@PathVariable("id") int id) throws SQLException{
         return new Long(animalRepository.delete(animalRepository.getById(id)));
+    }
+
+    @RequestMapping(value = "/animal/{id}", method = RequestMethod.PUT)
+    public Long updateAccount(@PathVariable("id") int id, @RequestBody Animal a) throws SQLException {
+        return new Long(animalRepository.update(id, a));
     }
 
 }
